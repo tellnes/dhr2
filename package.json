@@ -1,0 +1,15 @@
+{
+  "author": "Christian Tellnes <christian@tellnes.no> (http://christian.tellnes.com/)",
+  "name": "dhfr",
+  "description": "Domain-based HTTP Forwarding Ruleset",
+  "version": "0.0.0",
+  "main": "lib/",
+  "dependencies": {},
+  "devDependencies": {
+    "connect": "~2.2.1"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
