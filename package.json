@@ -6,7 +6,8 @@
   "main": "lib/",
   "dependencies": {},
   "devDependencies": {
-    "connect": "~2.2.1"
+    "connect": "~2.2.1",
+    "http-proxy": "~0.8.0"
   },
   "optionalDependencies": {},
   "engines": {

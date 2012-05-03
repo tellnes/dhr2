@@ -10,7 +10,8 @@ httpProxy.createServer(
   },
   dhfr.middleware({
     cache: {
-      defaultTTL: 10
+      defaultTTL: 300,
+      minTTL: 10
     }
   }),
   function(req, res, proxy) {
