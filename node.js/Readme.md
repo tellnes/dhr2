@@ -44,3 +44,8 @@ Connect compatible middleware that is caching the dhfr responses by `dhfr.handle
 
     $ npm isntall -d
     $ npm test
+
+
+## License
+
+It´s [MIT](http://tellnes.mit-license.org/)
