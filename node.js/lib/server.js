@@ -1,5 +1,5 @@
 var base = require('./base')
-  , Cache = require('./cache')
+  , LRU = require('lru-cache')
   ;
 
 
@@ -7,7 +7,7 @@ exports.middleware = function(options) {
   options = options || {};
 
   if (options.cache) {
-    var cacheHandler = exports.cacheMiddleware(options);
+    var cacheHandler = exports.cacheMiddleware(options.cache);
     return function(req, res, next) {
       cacheHandler(req, res, function(err) {
         if (err) return next(err);
@@ -23,24 +23,38 @@ exports.middleware = function(options) {
 exports.cacheMiddleware = function(options) {
   options = options || {};
 
-  var cache = new Cache(options.cache);
+  var cache = new LRU(options.maxObjects)
+    , defaultTTL = options.defaultTTL || 10
+    , minTTL = options.minTTL || 0
+    , maxTTL = options.maxTTL || Infinity
+    ;
 
   return function(req, res, next) {
     var key = req.headers.host.split(':')[0]
       , hit = cache.get(key)
+      , ttl
       ;
 
     req.on('dhfr', function(dhfr) {
-      cache.add(key, dhfr, dhfr.ttl);
+      cache.set(key, dhfr);
     });
 
     if (hit) {
-      res.setHeader('X-Cache', 'hit');
-      exports.respond(req, res, hit);
-    } else {
-      res.setHeader('X-Cache', 'miss');
-      next();
+      ttl = hit.ttl;
+      if (ttl < minTTL) ttl = minTTL;
+      else if (ttl > maxTTL) ttl = maxTTL;
+
+      if ((Date.now() - ttl*1000) < hit.retrieved) {
+        res.setHeader('X-Cache', 'hit');
+        exports.respond(req, res, hit);
+        return;
+      }
+
+      cache.del(key);
     }
+
+    res.setHeader('X-Cache', 'miss');
+    next();
   }
 };
 
