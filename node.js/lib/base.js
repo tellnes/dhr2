@@ -68,13 +68,22 @@ function parse(txt) {
     res[key] = val;
   }
 
+  // version is required
   if (!versionRegexp.test(res.v)) return null;
 
+  // location is required
+  if (!res.l) return null;
+
+  // normalize
   if (!protocolRegexp.test(res.l)) {
     res.l = 'http://' + res.l;
   }
 
-  if (res.l !== url.format(url.parse(res.l))) return null;
+  var obj = url.parse(res.l);
+  if (obj.path === '/' && res.l[res.l.length-1] !== '/') res.l += '/';
+
+  // invalid url
+  if (res.l !== url.format(obj)) return null;
 
   return new DHFR(res);
 }
