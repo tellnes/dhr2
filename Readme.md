@@ -1,6 +1,6 @@
-# Domain-based HTTP Forwarding (DHFR)
+# Domain-based HTTP Forwarding Ruleset (DHFR)
 
-__Domain-based HTTP Forwarding (DHFR)__ is a method that is using DNS to manage the forwarding of HTTP requests. This is done by inserting special TXT records in the DNS configuration and point the domain to one or more DHFR servers.
+__Domain-based HTTP Forwarding Ruleset (DHFR)__ is a method that is using DNS to manage the forwarding of HTTP requests. This is done by inserting special TXT records in the DNS configuration and point the domain to one or more DHFR servers.
 
 For example if you have the following dns configuration:
 
