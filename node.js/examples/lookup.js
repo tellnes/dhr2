@@ -6,6 +6,6 @@ dhfr.lookup('example.com', function(err, result) {
   if (!result) {
     console.log('No match');
   } else {
-    console.log('Location': result.location);
+    console.log('Location: ' + result.location);
   }
 });
