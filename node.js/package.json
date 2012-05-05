@@ -6,11 +6,16 @@
   "main": "lib/",
   "dependencies": {},
   "devDependencies": {
+    "mocha": "~1.0.3",
+    "should": "~0.6.3",
     "connect": "~2.2.1",
     "http-proxy": "~0.8.0"
   },
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --require should --reporter spec test/*.js"
   }
 }
