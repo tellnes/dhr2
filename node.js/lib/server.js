@@ -27,6 +27,7 @@ exports.cacheMiddleware = function(options) {
     , defaultTTL = options.defaultTTL || 600
     , minTTL = options.minTTL || 0
     , maxTTL = options.maxTTL || Infinity
+    , negativeTTL = options.negativeTTL || defaultTTL
     ;
 
   return function(req, res, next) {
@@ -36,6 +37,7 @@ exports.cacheMiddleware = function(options) {
       ;
 
     req.on('dhfr', function(dhfr) {
+      dhfr = dhfr || {retrieved: new Date, negative: true, ttl: negativeTTL};
       cache.set(key, dhfr);
     });
 
@@ -45,7 +47,13 @@ exports.cacheMiddleware = function(options) {
       else if (ttl > maxTTL) ttl = maxTTL;
 
       if ((Date.now() - ttl*1000) < hit.retrieved) {
-        exports.respond(req, res, hit);
+
+        if (hit.negative) {
+          req._negativeDHFR = true;
+          next();
+        } else {
+          exports.respond(req, res, hit);
+        }
         return;
       }
 
@@ -58,6 +66,8 @@ exports.cacheMiddleware = function(options) {
 
 
 exports.handle = function(req, res, next) {
+  if (req._negativeDHFR) return next();
+
   var host = req.headers.host;
   if (!host) return next();
 
@@ -66,9 +76,12 @@ exports.handle = function(req, res, next) {
 
   base.lookup(host, function(err, dhfr) {
     if (err) return next(err);
+
+    // cacheMiddleware
+    req.emit('dhfr', dhfr);
+
     if (!dhfr) return next();
 
-    req.emit('dhfr', dhfr);
     exports.respond(req, res, dhfr);
   });
 };
