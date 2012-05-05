@@ -1,7 +1,8 @@
-var dns = require('dns');
+var dns = require('dns')
+  , url = require('url')
+  ;
 
 
-var versionRegexp = /^DHFR1$/i;
 
 function lookup(domainName, cb) {
   dns.resolve(domainName, 'TXT', function(err, results) {
@@ -10,10 +11,9 @@ function lookup(domainName, cb) {
 
     results = results
       .map(parse)
-      .filter(function(info) {
-        return versionRegexp.test(info.v);
+      .filter(function(dhfr) {
+        return dhfr;
       })
-      .map(DHFR)
       .sort(function(a, b) {
         if (a.priority == b.priority) {
           a = a.domainName.length;
@@ -38,7 +38,7 @@ function lookup(domainName, cb) {
   });
 }
 
-
+var versionRegexp = /^DHFR1$/i;
 var splitRegexp = /;(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/;
 var quotesRegexp = /^\".*\"$/;
 
@@ -68,7 +68,15 @@ function parse(txt) {
     res[key] = val;
   }
 
-  return res;
+  if (!versionRegexp.test(res.v)) return;
+
+  if (!protocolRegexp.test(res.l)) {
+    res.l = 'http://' + res.l;
+  }
+
+  if (res.l !== url.format(url.parse(res.l))) return;
+
+  return new DHFR(res);
 }
 
 
@@ -94,11 +102,6 @@ function DHFR(info) {
   this.domainName = info.d || '*';
   this.priority = Number(info.p) || 0;
   this.ignorePath = !!info.i;
-
-
-  if (!protocolRegexp.test(this.location)) {
-    this.location = 'http://' + this.location;
-  }
 
 
   this.regexp = new RegExp('^' + escapeRegExp(this.domainName).replace(/\*/g, '(.*)') + '$', 'i');
