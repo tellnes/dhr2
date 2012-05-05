@@ -68,13 +68,13 @@ function parse(txt) {
     res[key] = val;
   }
 
-  if (!versionRegexp.test(res.v)) return;
+  if (!versionRegexp.test(res.v)) return null;
 
   if (!protocolRegexp.test(res.l)) {
     res.l = 'http://' + res.l;
   }
 
-  if (res.l !== url.format(url.parse(res.l))) return;
+  if (res.l !== url.format(url.parse(res.l))) return null;
 
   return new DHFR(res);
 }
