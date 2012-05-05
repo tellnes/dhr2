@@ -24,7 +24,7 @@ exports.cacheMiddleware = function(options) {
   options = options || {};
 
   var cache = new LRU(options.maxObjects)
-    , defaultTTL = options.defaultTTL || 10
+    , defaultTTL = options.defaultTTL || 600
     , minTTL = options.minTTL || 0
     , maxTTL = options.maxTTL || Infinity
     ;
@@ -40,7 +40,7 @@ exports.cacheMiddleware = function(options) {
     });
 
     if (hit) {
-      ttl = hit.ttl;
+      ttl = hit.ttl || defaultTTL;
       if (ttl < minTTL) ttl = minTTL;
       else if (ttl > maxTTL) ttl = maxTTL;
 
