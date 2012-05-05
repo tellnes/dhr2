@@ -45,7 +45,6 @@ exports.cacheMiddleware = function(options) {
       else if (ttl > maxTTL) ttl = maxTTL;
 
       if ((Date.now() - ttl*1000) < hit.retrieved) {
-        res.setHeader('X-Cache', 'hit');
         exports.respond(req, res, hit);
         return;
       }
@@ -53,7 +52,6 @@ exports.cacheMiddleware = function(options) {
       cache.del(key);
     }
 
-    res.setHeader('X-Cache', 'miss');
     next();
   }
 };
