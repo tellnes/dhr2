@@ -1,9 +1,9 @@
-var dhfr = require('..')
+var dhr2 = require('..')
   , http = require('http')
   ;
 
 http.createServer(function(req, res) {
-  dhfr.handle(req, res, function(err) {
+  dhr2.handle(req, res, function(err) {
     if (err) {
       res.writeHead(500);
       res.end(err.stack);

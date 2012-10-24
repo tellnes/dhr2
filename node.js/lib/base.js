@@ -11,8 +11,8 @@ function lookup(domainName, cb) {
 
     results = results
       .map(parse)
-      .filter(function(dhfr) {
-        return dhfr;
+      .filter(function(dhr2) {
+        return dhr2;
       })
       .sort(function(a, b) {
         if (a.priority == b.priority) {
@@ -38,7 +38,7 @@ function lookup(domainName, cb) {
   });
 }
 
-var versionRegexp = /^DHFR1$/i;
+var versionRegexp = /^DHR2\/1$/i;
 var splitRegexp = /;(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/;
 var quotesRegexp = /^\".*\"$/;
 
@@ -85,7 +85,7 @@ function parse(txt) {
   // invalid url
   if (res.l !== url.format(obj)) return null;
 
-  return new DHFR(res);
+  return new DHR2(res);
 }
 
 
@@ -96,8 +96,8 @@ function escapeRegExp(text) {
 
 var protocolRegexp = /^https?\:\/\//;
 
-function DHFR(info) {
-  if (!(this instanceof DHFR)) return new DHFR(info);
+function DHR2(info) {
+  if (!(this instanceof DHR2)) return new DHR2(info);
 
   this.retrieved = new Date();
 
@@ -126,11 +126,11 @@ function DHFR(info) {
   }
 }
 
-DHFR.prototype.match = function(domainName) {
+DHR2.prototype.match = function(domainName) {
   return this.regexp.test(domainName);
 };
 
 
 exports.lookup = lookup;
 exports.parse = parse;
-exports.DHFR = DHFR;
+exports.DHR2 = DHR2;

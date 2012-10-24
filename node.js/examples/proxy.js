@@ -1,4 +1,4 @@
-var dhfr = require('..')
+var dhr2 = require('..')
   , httpProxy = require('http-proxy')
   ;
 
@@ -8,9 +8,9 @@ httpProxy.createServer(
     req.buffer = httpProxy.buffer(req);
     next();
   },
-  dhfr.middleware({
+  dhr2.middleware({
     cache: {
-      defaultTTL: 300,
+      defaultTTL: 10,
       minTTL: 10
     }
   }),

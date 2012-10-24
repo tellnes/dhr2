@@ -1,7 +1,7 @@
 {
   "author": "Christian Tellnes <christian@tellnes.no> (http://christian.tellnes.com/)",
-  "name": "dhfr",
-  "description": "Domain-based HTTP Forwarding Ruleset",
+  "name": "dhr2",
+  "description": "Domain-based HTTP Redirect Ruleset (DHR2)",
   "version": "0.0.0",
   "main": "lib/",
   "dependencies": {

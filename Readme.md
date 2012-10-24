@@ -1,13 +1,13 @@
-# Domain-based HTTP Forwarding Ruleset (DHFR)
+# Domain-based HTTP Redirect Ruleset (DHR2)
 
-__Domain-based HTTP Forwarding Ruleset (DHFR)__ is a method that is using DNS to manage the forwarding of HTTP requests. This is done by inserting special TXT records in the DNS configuration and point the domain to one or more DHFR servers.
+__Domain-based HTTP Redirect Ruleset (DHR2)__ is a method that is using DNS to manage the redirects of HTTP requests. This is done by inserting special TXT records in the DNS configuration and point the domain to one or more DHR2 servers.
 
 For example if you have the following dns configuration:
 
-    example.com    IN    TXT    "v=DHFR1; l=http://www.iana.org/domains/example/"
+    example.com    IN    TXT    "v=DHR2/1; l=http://www.iana.org/domains/example/"
     example.com    IN    A      192.0.43.10
 
-then the DHFR server responds as follows:
+then the DHR2 server responds as follows:
 
     > curl -Is http://example.com/
     HTTP/1.1 302 Moved Temporarily
@@ -17,13 +17,13 @@ then the DHFR server responds as follows:
 
 ## Using CNAME
 
-DHFR is CNAME compatible. This is done by having several rules on the domain name that the CNAME record is pointing to.
+DHR2 is CNAME compatible. This is done by having several rules on the domain name that the CNAME record is pointing to.
 
     github.example.com    IN    CNAME    server.example.com
 
     server.example.com    IN    A        192.0.43.10
-    server.example.com    IN    TXT      "v=DHFR1; l=www.example.com"
-    server.example.com    IN    TXT      "v=DHFR1; l=github.com; d=github.example.com"
+    server.example.com    IN    TXT      "v=DHR2/1; l=www.example.com"
+    server.example.com    IN    TXT      "v=DHR2/1; l=github.com; d=github.example.com"
 
 This will result in:
 
@@ -42,9 +42,9 @@ To match multiple domains under one when using CNAME, you can use a wildcard.
     any.example.com       IN    CNAME    server.example.com
 
     server.example.com    IN    A        192.0.43.10
-    server.example.com    IN    TXT      "v=DHFR1; l=www.example.com"
-    server.example.com    IN    TXT      "v=DHFR1; l=www.github.com; d=github.example.com"
-    server.example.com    IN    TXT      "v=DHFR1; l=google.com; d=*.example.com"
+    server.example.com    IN    TXT      "v=DHR2/1; l=www.example.com"
+    server.example.com    IN    TXT      "v=DHR2/1; l=www.github.com; d=github.example.com"
+    server.example.com    IN    TXT      "v=DHR2/1; l=google.com; d=*.example.com"
 
 This will result in:
 

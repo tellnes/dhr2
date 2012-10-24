@@ -36,9 +36,9 @@ exports.cacheMiddleware = function(options) {
       , ttl
       ;
 
-    req.on('dhfr', function(dhfr) {
-      dhfr = dhfr || {retrieved: new Date, negative: true, ttl: negativeTTL};
-      cache.set(key, dhfr);
+    req.on('dhr2', function(dhr2) {
+      dhr2 = dhr2 || {retrieved: new Date, negative: true, ttl: negativeTTL};
+      cache.set(key, dhr2);
     });
 
     if (hit) {
@@ -49,7 +49,7 @@ exports.cacheMiddleware = function(options) {
       if ((Date.now() - ttl*1000) < hit.retrieved) {
 
         if (hit.negative) {
-          req._negativeDHFR = true;
+          req._negativeDHR2 = true;
           next();
         } else {
           exports.respond(req, res, hit);
@@ -66,7 +66,7 @@ exports.cacheMiddleware = function(options) {
 
 
 exports.handle = function(req, res, next) {
-  if (req._negativeDHFR) return next();
+  if (req._negativeDHR2) return next();
 
   var host = req.headers.host;
   if (!host) return next();
@@ -74,22 +74,22 @@ exports.handle = function(req, res, next) {
   // remote port
   host = host.split(':')[0];
 
-  base.lookup(host, function(err, dhfr) {
+  base.lookup(host, function(err, dhr2) {
     if (err) return next(err);
 
     // cacheMiddleware
-    req.emit('dhfr', dhfr);
+    req.emit('dhr2', dhr2);
 
-    if (!dhfr) return next();
+    if (!dhr2) return next();
 
-    exports.respond(req, res, dhfr);
+    exports.respond(req, res, dhr2);
   });
 };
 
 
-exports.respond = function(req, res, dhfr) {
-  var url = dhfr.location;
-  if (!dhfr.ignorePath) {
+exports.respond = function(req, res, dhr2) {
+  var url = dhr2.location;
+  if (!dhr2.ignorePath) {
     url += req.url;
   }
 
@@ -102,14 +102,14 @@ exports.respond = function(req, res, dhfr) {
   res.setHeader('Location', url);
   res.setHeader('Content-Length', Buffer.byteLength(content));
   res.setHeader('Content-Type', 'text/html; charset=UTF-8');
-  res.setHeader('Age', Math.round((now-dhfr.retrieved)/1000));
+  res.setHeader('Age', Math.round((now-dhr2.retrieved)/1000));
 
-  if (dhfr.ttl) {
-    res.setHeader('Expires', new Date(Date.now() + dhfr.ttl).toGMTString());
-    res.setHeader('Cache-Control', 'public, max-age=' + dhfr.ttl);
+  if (dhr2.ttl) {
+    res.setHeader('Expires', new Date(Date.now() + dhr2.ttl).toGMTString());
+    res.setHeader('Cache-Control', 'public, max-age=' + dhr2.ttl);
   }
 
-  res.statusCode = dhfr.statusCode;
+  res.statusCode = dhr2.statusCode;
 
   if (req.method === 'HEAD') {
     res.end();

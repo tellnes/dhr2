@@ -3,7 +3,7 @@ var base = require('./base')
 
 exports.lookup = base.lookup;
 exports.parse = base.parse;
-exports.DHFR = base.DHFR;
+exports.DHR2 = base.DHR2;
 
 exports.middleware = server.middleware;
 exports.cacheMiddleware = server.cacheMiddleware;

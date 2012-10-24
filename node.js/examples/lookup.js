@@ -1,6 +1,6 @@
-var dhfr = require('..');
+var dhr2 = require('..');
 
-dhfr.lookup('example.com', function(err, result) {
+dhr2.lookup('example.com', function(err, result) {
   if (err) throw err;
 
   if (!result) {

@@ -1,7 +1,7 @@
-# DHFR implementation in Node.js
+# DHR2 implementation in Node.js
 
 
-This is an implementation of the DHFR specification [Node.js](http://nodejs.org/). It can either be used as a middleware to [connect](https://github.com/senchalabs/connect) or as a standalone server.
+This is an implementation of the DHR2 specification [Node.js](http://nodejs.org/). It can either be used as a middleware to [connect](https://github.com/senchalabs/connect) or as a standalone server.
 
 See the examples folder for usage examples.
 
@@ -15,15 +15,15 @@ See the examples folder for usage examples.
 
 ### dhfr.lookup(hostname, callback)
 
-Responds with a `DHFR` object if it finds a matching DHFR record.
+Responds with a `DHR2` object if it finds a matching DHR2 record.
 
 ### dhfr.parse(string)
 
-Parses a DHFR string and returns a `DHFR` object if the string is valid.
+Parses a DHR2 string and returns a `DHR2` object if the string is valid.
 
 ### dhfr.handle(req, res, next)
 
-Handles an http request and calls the `next` function if it does not find any DHFR entry. This is used internally by `dhfr.middleware`.
+Handles an http request and calls the `next` function if it does not find any DHR2 entry. This is used internally by `dhfr.middleware`.
 
 ### dhfr.middleware(options)
 
@@ -37,7 +37,7 @@ Connect compatible middleware that is caching the dhfr responses by `dhfr.handle
 - __defaultTTL__ ttl value for dhfr records that does not have a ttl. Default is `10`
 - __minTTL__ Minimum ttl value
 - __maxTTL__ Maximum ttl value
-- __negativeTTL__ TTL value for negative DHFR lookups. Default is `defaultTTL`
+- __negativeTTL__ TTL value for negative DHR2 lookups. Default is `defaultTTL`
 
 
 ## Running tests
